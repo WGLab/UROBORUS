@@ -16,16 +16,16 @@ UROBORUS.pl 1.0.0 #circRNA identification tool in total RNA-seq data
 usage:
 perl UROBORUS.pl -index /path/genome -gtf /path/genes.gtf -fasta /path unmapped.sam
 Options:
--index:	genome index (use bowtie index);
--gtf:	gene annotation file (*.gtf file);
--fasta:	path for genome sequence in fasta file (*.fa) in separate chromosome;
--p:	threads (Integer, default = 6);
--temp:	keeping the temporary file;
--help:	usage help;
+-index: genome index (use bowtie index);
+-gtf:   gene annotation file (*.gtf file);
+-fasta: path for genome sequence in fasta file (*.fa) in separate chromosome;
+-p:     threads (Integer, default = 6);
+-temp:  keeping the temporary file;
+-help:  usage help;
 
 ## Note:
 
-1.If the genome sequence in each chromosome (chr1.fa, chr2.fa, chr3.fa, ¡­)is saved in the directory /home/circRNA/Gene, the path for genome sequence should be set as ¡°-fasta /home/circRNA/Gene¡±;
+1.If the genome sequence in each chromosome (chr1.fa, chr2.fa, chr3.fa)is saved in the directory /home/circRNA/Gene, the path for genome sequence should be set as -fasta /home/circRNA/Gene;
 2.The following files ( genome index, gene annotation, genome sequence) should be download from TopHat webstie: http://ccb.jhu.edu/software/tophat/igenomes.shtml
 
 
@@ -69,5 +69,4 @@ The first 3 columns are the same with bed file format.
 6. genomic distance
 7. read counts
 8. matched transcript id
-
 
