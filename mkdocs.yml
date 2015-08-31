@@ -1,0 +1,21 @@
+site_name: UROBORUS Documentation
+site_url: http://uroborus.openbioinformatics.org/
+repo_url: http://github.com/WangGenomicsLab/uroborus/
+repo_name: GitHub
+site_description: Documentation for UROBORUS software
+site_author: Xiaofeng Song, et al
+site_favicon: favicon.ico
+copyright: 2015- UROBORUS
+google_analytics: ['UA-48623707-1', 'www.openbioinformatics.org/uroborus']
+
+docs_dir: .
+include_search: true
+#use_absolute_urls: true
+#use_directory_urls: false
+
+pages:
+# for strange reasons I can only put max of 7 items below for building to pass
+- ['index.md', 'UROBORUS']
+- ['download.md', 'Download UROBORUS']
+
+
