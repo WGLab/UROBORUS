@@ -10,11 +10,8 @@ google_analytics: ['UA-48623707-1', 'www.openbioinformatics.org/uroborus']
 
 docs_dir: docs
 include_search: true
-#use_absolute_urls: true
-#use_directory_urls: false
 
 pages:
-# for strange reasons I can only put max of 7 items below for building to pass
 - ['index.md', 'UROBORUS']
 - ['download.md', 'Download UROBORUS']
 
