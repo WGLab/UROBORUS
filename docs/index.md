@@ -1,4 +1,4 @@
-# UROBORUS
+## UROBORUS
 
 UROBORUS is a computational pipeline to detect circular RNA from RNA-Seq data, based on junction reads from back spliced exons.
 
