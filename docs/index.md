@@ -1,18 +1,12 @@
 # UROBORUS
 
-UROBORUS is a computational pipeline to detect circular RNA supported by junction reads from back spliced exons.
-
-## Download
-
-Download the latest version of UROBORUS. Version: 1.0.0. Last Modified: 2015-8-05
-Download here
+UROBORUS is a computational pipeline to detect circular RNA from RNA-Seq data, based on junction reads from back spliced exons.
 
 ## Usage
 
-Authors: Xiaofeng Song (xfsong.nuaa@gmail.com or xfsong@nuaa.edu.cn)
-Usage:
 Before using UROBORUS.pl, you should use TopHat to align the reads to genome, and get the unmapped.sam file.
-UROBORUS.pl 1.0.0 #circRNA identification tool in total RNA-seq data
+
+```
 usage:
 perl UROBORUS.pl -index /path/genome -gtf /path/genes.gtf -fasta /path unmapped.sam
 Options:
@@ -22,10 +16,11 @@ Options:
 -p:     threads (Integer, default = 6);
 -temp:  keeping the temporary file;
 -help:  usage help;
+```
 
 ## Note:
 
-1.If the genome sequence in each chromosome (chr1.fa, chr2.fa, chr3.fa)is saved in the directory /home/circRNA/Gene, the path for genome sequence should be set as -fasta /home/circRNA/Gene;
+1.If the genome sequence in each chromosome (chr1.fa, chr2.fa, chr3.fa)is saved in the directory `/home/circRNA/Gene`, the path for genome sequence should be set as `-fasta /home/circRNA/Gene`;
 2.The following files ( genome index, gene annotation, genome sequence) should be download from TopHat webstie: http://ccb.jhu.edu/software/tophat/igenomes.shtml
 
 
@@ -55,8 +50,6 @@ Convert unmapped.bam to unmapped.sam (using samtools view)
 ```
 samtools view unmapped.bam > unmapped.sam
 ```
-
-* Bowtie
 
 ## Output file format:
 
