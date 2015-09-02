@@ -18,19 +18,19 @@ Options:
 -help:  usage help;
 ```
 
-## Note:
+## Note
 
 1. If the genome sequence in each chromosome (chr1.fa, chr2.fa, chr3.fa)is saved in the directory `/home/circRNA/Gene`, the path for genome sequence should be set as `-fasta /home/circRNA/Gene`;
 2. The following files ( genome index, gene annotation, genome sequence) should be download from TopHat webstie: http://ccb.jhu.edu/software/tophat/igenomes.shtml
 
 
-## Example:
+## Example
 
 ```
 perl UROBORUS.pl -index /home/***/index/Homo_sapiens/UCSC/hg19/Sequence/BowtieIndex/genome -gtf /home/***/circRNA/Gene/genes.gtf -fasta /home/***/circRNA/Gene unmapped.sam
 ```
 
-## Installation
+## Prerequisites
 
 Software Prerequisites:
 
@@ -51,7 +51,7 @@ Convert unmapped.bam to unmapped.sam (using samtools view)
 samtools view unmapped.bam > unmapped.sam
 ```
 
-## Output file format:
+## Output file format
 
 The first 3 columns are the same with bed file format.
 
