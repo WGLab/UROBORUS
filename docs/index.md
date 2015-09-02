@@ -20,8 +20,8 @@ Options:
 
 ## Note:
 
-1.If the genome sequence in each chromosome (chr1.fa, chr2.fa, chr3.fa)is saved in the directory `/home/circRNA/Gene`, the path for genome sequence should be set as `-fasta /home/circRNA/Gene`;
-2.The following files ( genome index, gene annotation, genome sequence) should be download from TopHat webstie: http://ccb.jhu.edu/software/tophat/igenomes.shtml
+1. If the genome sequence in each chromosome (chr1.fa, chr2.fa, chr3.fa)is saved in the directory `/home/circRNA/Gene`, the path for genome sequence should be set as `-fasta /home/circRNA/Gene`;
+2. The following files ( genome index, gene annotation, genome sequence) should be download from TopHat webstie: http://ccb.jhu.edu/software/tophat/igenomes.shtml
 
 
 ## Example:
@@ -54,6 +54,7 @@ samtools view unmapped.bam > unmapped.sam
 ## Output file format:
 
 The first 3 columns are the same with bed file format.
+
 1. Chromosome
 2. start of junction
 3. end of junction
