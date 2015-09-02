@@ -1,4 +1,4 @@
-## UROBORUS
+## Introduction
 
 UROBORUS is a computational pipeline to detect circular RNA from RNA-Seq data, based on junction reads from back spliced exons.
 
@@ -64,3 +64,10 @@ The first 3 columns are the same with bed file format.
 7. read counts
 8. matched transcript id
 
+## Reference
+
+Song X, Zhang N, Han P, Lai RK, Wang K, Lu W. Circular RNA Profile in Gliomas Revealed by Identification Tool UROBORUS. submitted, 2015
+
+## Contact
+
+Please contact Xiaofeng Song (xfsong.nuaa@gmail.com) for questions and comments.
