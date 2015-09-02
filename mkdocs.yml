@@ -11,7 +11,8 @@ google_analytics: ['UA-48623707-1', 'www.openbioinformatics.org/uroborus']
 docs_dir: docs
 
 pages:
-- ['index.md', 'UROBORUS']
-- ['download.md', 'Download UROBORUS']
+- UROBORUS: index.md
+- Download: download.md
+- Manual: manual.md
 
 
