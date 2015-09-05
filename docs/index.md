@@ -29,6 +29,9 @@ Options:
 ```
 perl UROBORUS.pl -index /home/***/index/Homo_sapiens/UCSC/hg19/Sequence/BowtieIndex/genome -gtf /home/***/circRNA/Gene/genes.gtf -fasta /home/***/circRNA/Gene unmapped.sam
 ```
+Example files download:
+1. Input file -- The unmapped SAM format file (rar file): unmapped sam file
+2. Output file -- The reported circRNA list : circRNA list file
 
 ## Prerequisites
 
