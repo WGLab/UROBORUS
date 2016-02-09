@@ -1,12 +1,12 @@
 site_name: UROBORUS Documentation
 site_url: http://uroborus.openbioinformatics.org/
-repo_url: http://github.com/WangGenomicsLab/uroborus/
+repo_url: http://github.com/WGLab/uroborus/
 repo_name: GitHub
 site_description: Documentation for UROBORUS software
 site_author: Xiaofeng Song, et al
 site_favicon: favicon.ico
 copyright: 2015- UROBORUS
-google_analytics: ['UA-48623707-1', 'www.openbioinformatics.org/uroborus']
+google_analytics: ['UA-73567476-1', 'uroborus.openbioinformatics.org']
 
 docs_dir: docs
 
