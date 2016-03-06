@@ -63,7 +63,7 @@ The first 3 columns are the same with bed file format.
 
 ## Reference
 
-Song X, Zhang N, Han P, Lai RK, Wang K, Lu W. Circular RNA Profile in Gliomas Revealed by Identification Tool UROBORUS. submittedNucleic Acids Research, 2016,1.doi: 10.1093/nar/gkw075.
+Song X, Zhang N, Han P, Lai RK, Wang K, Lu W. Circular RNA Profile in Gliomas Revealed by Identification Tool UROBORUS. Nucleic Acids Research, 2016,1.doi: 10.1093/nar/gkw075.
 
 ## Contact
 
