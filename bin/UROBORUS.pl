@@ -6,13 +6,13 @@ use Getopt::Long;
 
 ####################################################################################
 # USAGE
-#					UROBORUS.pl 1.0.0
+#					UROBORUS.pl 0.0.2
 #	circRNA identification tool in total RNA-seq data (or Ploy(A)-minus RNA-seq data)
 my $USAGE =<<USAGE;
-	UROBORUS.pl 1.0.0         (Dec.18,2014)
+	UROBORUS.pl 0.0.2         (March.6,2016)
 	usage:
 	UROBORUS.pl -index /path/genome -gtf /path/genes.gtf -fasta /path/ unmapped.sam 
-	-index:	genome index(use bowtie index);
+	-index:	genome index(use bowtie1 index);
 	-gtf:	gene anotation file(*.gtf file);
 	-fasta:	path for genome sequence in fasta file (*.fa) in separate chromosome;
 	-p:	threads (Integer,default = 6);
@@ -21,6 +21,9 @@ my $USAGE =<<USAGE;
 
 USAGE
 #contact: xfsong@nuaa.edu.cn
+####################################################################################
+#Version 0.0.2 modification:
+#correct a bug: set the option --bowtie1, when using TopHat. 
 ####################################################################################
 
 	my ( $opt_index, $opt_gtf, $opt_fasta,$opt_p,$opt_help,$opt_temp);
@@ -60,7 +63,7 @@ USAGE
 	$when = localtime();
 	print STDERR "[",$when,"]";
 	print STDERR " Now tophat..........";
-	system("tophat -p $opt_p -o seed_mapped_out --no-coverage-search $opt_index R20_1.fastq R20_2.fastq");
+	system("tophat --bowtie1 -p $opt_p -o seed_mapped_out --no-coverage-search $opt_index R20_1.fastq R20_2.fastq");
 	print STDERR "finished!","\n";
 
 	my $pwd_str1 = `pwd`;

@@ -10,7 +10,7 @@ Before using UROBORUS.pl, you should use TopHat to align the reads to genome, an
 usage:
 perl UROBORUS.pl -index /path/genome -gtf /path/genes.gtf -fasta /path unmapped.sam
 Options:
--index: genome index (use bowtie index);
+-index: genome index (use bowtie1 index);
 -gtf:   gene annotation file (*.gtf file);
 -fasta: path for genome sequence in fasta file (*.fa) in separate chromosome;
 -p:     threads (Integer, default = 6);
@@ -37,19 +37,16 @@ Software Prerequisites:
 The following three software should be installed in your cluster or computer before running the UROBORUS.pl
 
 * TopHat
-
-```
 tophat -p 6 -o RL_9_tophat_out /home/***/index/Homo_sapiens/UCSC/hg19/Sequence/BowtieIndex/genome
 /home/***/data/Glioblastoma/RL_9_OLI_GTCCGC_L008_R1_001.fastq /home/***/data/Glioblastoma/RL_9_OLI_GTCCGC_L008_R2_001.fastq
-```
 
 * samtools
-
 Convert unmapped.bam to unmapped.sam (using samtools view)
-
-```
 samtools view unmapped.bam > unmapped.sam
-```
+
+* Bowtie1
+Within UROBORUS.pl, Bowtie1 should be used.
+However, before running UROBORUS.pl, You run Tophat to get unmapped.sam file, Bowtie1 or Bowtie2 should be selected based on read length. 
 
 ## Output file format
 
@@ -66,7 +63,7 @@ The first 3 columns are the same with bed file format.
 
 ## Reference
 
-Song X, Zhang N, Han P, Lai RK, Wang K, Lu W. Circular RNA Profile in Gliomas Revealed by Identification Tool UROBORUS. submitted, 2015
+Song X, Zhang N, Han P, Lai RK, Wang K, Lu W. Circular RNA Profile in Gliomas Revealed by Identification Tool UROBORUS. Nucleic Acids Research, 2016,1.doi: 10.1093/nar/gkw075.
 
 ## Contact
 

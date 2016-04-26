@@ -12,4 +12,4 @@ Documentation on the software can be found at http://uroborus.openbioinformatics
 
 ## Reference
 
-Song X, Zhang N, Han P, Lai RK\*, Wang K\*, Lu W\*. Circular RNA Profile in Gliomas Revealed by Identification Tool UROBORUS. *Nucleic Acids Research*, in press, 2016
+Song X, Zhang N, Han P, Lai RK, Wang K, Lu W. Circular RNA Profile in Gliomas Revealed by Identification Tool UROBORUS. Nucleic Acids Research, 2016,1.doi: 10.1093/nar/gkw075.
