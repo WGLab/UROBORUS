@@ -37,12 +37,14 @@ Software Prerequisites:
 The following three software should be installed in your cluster or computer before running the UROBORUS.pl
 
 * TopHat
-tophat -p 6 -o RL_9_tophat_out /home/***/index/Homo_sapiens/UCSC/hg19/Sequence/BowtieIndex/genome
-/home/***/data/Glioblastoma/RL_9_OLI_GTCCGC_L008_R1_001.fastq /home/***/data/Glioblastoma/RL_9_OLI_GTCCGC_L008_R2_001.fastq
+
+`tophat -p 6 -o RL_9_tophat_out /home/***/index/Homo_sapiens/UCSC/hg19/Sequence/BowtieIndex/genome
+/home/***/data/Glioblastoma/RL_9_OLI_GTCCGC_L008_R1_001.fastq /home/***/data/Glioblastoma/RL_9_OLI_GTCCGC_L008_R2_001.fastq`
 
 * samtools
 Convert unmapped.bam to unmapped.sam (using samtools view)
-samtools view unmapped.bam > unmapped.sam
+
+`samtools view unmapped.bam > unmapped.sam`
 
 * Bowtie1
 Within UROBORUS.pl, Bowtie1 should be used.
