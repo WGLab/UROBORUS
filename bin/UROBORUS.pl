@@ -6,10 +6,10 @@ use Getopt::Long;
 
 ####################################################################################
 # USAGE
-#					UROBORUS.pl 0.0.2
+#					UROBORUS.pl 0.1.3
 #	circRNA identification tool in total RNA-seq data (or Ploy(A)-minus RNA-seq data)
 my $USAGE =<<USAGE;
-	UROBORUS.pl 0.0.2         (March.6,2016)
+	UROBORUS.pl 0.1.3         (July.11,2016)
 	usage:
 	UROBORUS.pl -index /path/genome -gtf /path/genes.gtf -fasta /path/ unmapped.sam 
 	-index:	genome index(use bowtie1 index);
@@ -22,10 +22,15 @@ my $USAGE =<<USAGE;
 USAGE
 #contact: xfsong@nuaa.edu.cn
 ####################################################################################
-#Version 0.0.2 modification:
-#correct a bug: set the option --bowtie1, when using TopHat. 
-####################################################################################
-
+##Version 0.1.3 modification:
+##correct a bug: filtered the circRNA list, the results of circRNA cadidates were more than two reads supported.
+##----------------------------------
+##Version 0.0.2 modification:
+##correct a bug: set the option --bowtie1, when using TopHat. 
+##---------------------------------
+##Version 0.1.2 modification:
+##correct a bug: can support 50-200bp read length total RNA-seq data.
+#####################################################################################
 	my ( $opt_index, $opt_gtf, $opt_fasta,$opt_p,$opt_help,$opt_temp);
 	$opt_p = 6;
 	$opt_help = 0;
@@ -54,10 +59,30 @@ USAGE
 	my $when;
 	$when = localtime();
 
+	#set read_length_label = 0 if <100bp; read_length_label = 1 if >100bp
+	open (RLL_IN, "$ARGV[0]") or die ("The input file should be *.sam file,please check the input file!\n");#input unmapped.sam file
+	my $read_length_label = 0;
+	my $main_line = <RLL_IN>;
+	chomp $main_line;
+	my @main_array = split("\t",$main_line);
+	my $main_read_length = length($main_array[9]);
+	
+	if ( $main_read_length > 200 ) {die "Now UROBORUS can only support below 200bp read length total RNA-seq data!";}
+	
+	if ( $main_read_length > 100 )
+	{
+		$read_length_label = 1;
+	}
+	# end
+	close(RLL_IN);
+	
+	
+	
 	#print STDOUT "[",$when,"]";
 	print STDERR "[",$when,"]";
 	print STDERR " Preparing the reads..........";
-	&trimmer;
+	if ($read_length_label == 0) {&trimmer0};
+	if ($read_length_label == 1) {&trimmer1};
 	print STDERR "finished!","\n";
 
 	$when = localtime();
@@ -83,58 +108,67 @@ USAGE
 	print STDERR "[",$when,"]";
 	print STDERR " Locating the seeds in the genome...........";
 	&locating("filtered_mapped_paired_seeds.sam","paired_seeds_location");
-	&locating("filtered_mapped_single_seed.sam","single_seed_location");
+	if ($read_length_label == 0) {&locating("filtered_mapped_single_seed.sam","single_seed_location");}
 	print STDERR "finished!","\n";
 
 	$when = localtime();
 	print STDERR "[",$when,"]";
 	print STDERR " Extending the seeds...........";
 	&paired_seeds_extension;#("paired_seeds_location","paired_seeds_extension");
-	&single_seed_extension;#(input:single_seed_location.sam;      output:IMR_1.fastq,IMR_2.fastq);
+	if ($read_length_label == 0) 
+		{&single_seed_extension;} #(input:single_seed_location.sam;      output:IMR_1.fastq,IMR_2.fastq);
 	print STDERR "finished!","\n";
 
-	$when = localtime();
-	print STDERR "[",$when,"]";
-	print STDERR " Now bowtie..........";
-	system("bowtie -p $opt_p -n 0 -M 20 -I 100 -X 100000 $opt_index --ff -1 IMR_1.fastq -2 IMR_2.fastq -S --sam-nohead > mapped_IMR.sam");
-	print STDERR "finished!","\n";
+	if ($read_length_label == 0)
+	{
+		$when = localtime();
+		print STDERR "[",$when,"]";
+		print STDERR " Now bowtie..........";
+	 	system("bowtie -p $opt_p -n 0 -M 20 -I 100 -X 100000 $opt_index --ff -1 IMR_1.fastq -2 IMR_2.fastq -S --sam-nohead > mapped_IMR.sam");
+		print STDERR "finished!","\n";
 
-	$when = localtime();
-	print STDERR "[",$when,"]";
-	print STDERR " Now filtering mapped IMR..........";
-	&mapped_IMR_filter;
-	print STDERR "finished!","\n";
+		$when = localtime();
+		print STDERR "[",$when,"]";
+		print STDERR " Now filtering mapped IMR..........";
+		&mapped_IMR_filter;
+		print STDERR "finished!","\n";
 
-	$when = localtime();
-	print STDERR "[",$when,"]";
-	print STDERR " Now sorting mapped IMR sam file..........";
-	&sorting_samfile("filtered_mapped_IMR.sam","sorted_filtered_mapped_IMR.sam");
-	print STDERR "finished!","\n";
+	
+		$when = localtime();
+		print STDERR "[",$when,"]";
+		print STDERR " Now sorting mapped IMR sam file..........";
+		&sorting_samfile("filtered_mapped_IMR.sam","sorted_filtered_mapped_IMR.sam");
+		print STDERR "finished!","\n";
 
-	$when = localtime();
-	print STDERR "[",$when,"]";
-	print STDERR " Now locating mapped IMR..........";
-	&locating("sorted_filtered_mapped_IMR.sam","mapped_IMR_location");
-	print STDERR "finished!","\n";
-
+		$when = localtime();
+		print STDERR "[",$when,"]";
+		print STDERR " Now locating mapped IMR..........";
+		&locating("sorted_filtered_mapped_IMR.sam","mapped_IMR_location");
+		print STDERR "finished!","\n";
+	}
+	
 	$when = localtime();
 	print STDERR "[",$when,"]";
 	print STDERR " Now mating the reads...........";
 	&paired_seeds_mating;   #input file: paired_seeds_extension.txt; output file: paired_seeds_to_reads;
-	&mapped_IMR_mating;   #input file: mapped_IMR_location.txt; output file: IMR_to_reads.txt;
+	if ($read_length_label == 0) { &mapped_IMR_mating; }  #input file: mapped_IMR_location.txt; output file: IMR_to_reads.txt;
 	print STDERR "finished!","\n";
 
-	$when = localtime();
-	print STDERR "[",$when,"]";
-	print STDERR " Merging the results...........";
-	unlink "mapped_reads_list.txt" if -e "mapped_reads_list.txt";
-	system("cat paired_seeds_to_reads.txt IMR_to_reads.txt >> mapped_reads_list.txt");
-	print STDERR "finished!","\n";
-
+	if ($read_length_label == 0)
+	{
+		$when = localtime();
+		print STDERR "[",$when,"]";
+		print STDERR " Merging the results...........";
+		unlink "mapped_reads_list.txt" if -e "mapped_reads_list.txt";
+		system("cat paired_seeds_to_reads.txt IMR_to_reads.txt >> mapped_reads_list.txt");
+		print STDERR "finished!","\n";
+	}
+	
 	$when = localtime();
 	print STDERR "[",$when,"]";
 	print STDERR " Making the statistics...........";
-	&cR_statistics();
+	if ($read_length_label == 0) { &cR_statistics_0(); }
+	if ($read_length_label == 1) { &cR_statistics_1(); }
 	print STDERR "finished!","\n";
 
 	$when = localtime();
@@ -163,13 +197,17 @@ USAGE
 		unlink "circRNA_list_temp.txt" if -e "circRNA_list_temp.txt";
 		unlink "IMR_to_reads.txt" if -e "IMR_to_reads.txt";
 		unlink "mapped_reads_list.txt" if -e "mapped_reads_list.txt";
+		unlink "circRNA_list_1.txt" if -e "circRNA_list_1.txt";
 	}
 	
 	$when = localtime();
 	print STDERR "[",$when,"]";
 	print STDERR " Completed successfully!  The time elapsed: about ",0.01*int ( (time()-$then)/36 )," hours.\n";
 
-sub trimmer
+	
+	
+
+sub trimmer0
 {
 	open (TR_IN, "$ARGV[0]") or die ("The input file should be *.sam file,please check the input file!\n");#input unmapped.sam file
 	open (TR_OUT1, ">R20_1.fastq");
@@ -198,6 +236,44 @@ sub trimmer
 	
 	# generate tail 20bp of reads;
 		my $seq_label_B = join ("._.",join ("","@",$array[0]),"B",$array[9],$array[10] );
+		my $seq20_B = reverse substr ( reverse ($array[9]),0,20);
+		my $qual_label_B = "+";
+		my $qual20_B = reverse substr ( reverse ($array[10]),0,20);
+		print TR_OUT2 $seq_label_B, "\n", $seq20_B, "\n", $qual_label_B, "\n", $qual20_B, "\n";
+	}
+	close(TR_IN);close(TR_OUT1);close(TR_OUT2);
+}
+	
+	
+sub trimmer1
+{
+	open (TR_IN, "$ARGV[0]") or die ("The input file should be *.sam file,please check the input file!\n");#input unmapped.sam file
+	open (TR_OUT1, ">R20_1.fastq");
+	open (TR_OUT2, ">R20_2.fastq");
+
+	my $line;
+	my @array;
+
+	my $read_length;
+
+	while ($line = <TR_IN>) {
+	# generate head 20 of reads; 
+		chomp $line;
+		@array = split("\t",$line);
+	
+		$read_length = length($array[9]);
+		if ( $read_length < 40 ) {next;}
+		if ( $array[0] =~ /\._\./){die "The read label contains unexpected string '._.' please remove or replace it!";}
+	# generate first 20bp of reads;	
+		$array[10] =~ s/\//~/g;
+		my $seq_label_A = join ("._.",join ("","@",$array[0]),"A",$array[9] );
+		my $seq20_A = substr ($array[9],0,20);
+		my $qual_label_A = "+";
+		my $qual20_A = substr ($array[10],0,20);
+		print TR_OUT1 $seq_label_A, "\n", $seq20_A, "\n", $qual_label_A, "\n", $qual20_A, "\n";
+	
+	# generate tail 20bp of reads;
+		my $seq_label_B = join ("._.",join ("","@",$array[0]),"B",$array[9] );
 		my $seq20_B = reverse substr ( reverse ($array[9]),0,20);
 		my $qual_label_B = "+";
 		my $qual20_B = reverse substr ( reverse ($array[10]),0,20);
@@ -433,8 +509,8 @@ sub paired_seeds_extension
 {
 	open (SAM_IN,"paired_seeds_location.sam");
 	open (SAM_OUT,">paired_seeds_extension.sam");
-	open (FQ_OUT1,">BMR_1.fastq");
-	open (FQ_OUT2,">BMR_2.fastq");
+#	open (FQ_OUT1,">BMR_1.fastq");
+#	open (FQ_OUT2,">BMR_2.fastq");
 
 	my $mismatch_num;
 	my $Lower_exon;
@@ -444,7 +520,7 @@ sub paired_seeds_extension
 	my $new_sam_line;
 	my $exon_extension;
 	my $read_extension;
-	my $qual_extension;
+#	my $qual_extension;
 
 	my $read_length;
 	my $line;
@@ -480,17 +556,17 @@ sub paired_seeds_extension
 				$extension_length = $sam_array[3]-$array[1];
 				$exon_extension = substr ( $Lower_exon,0,$extension_length);
 				$read_extension = reverse substr ( reverse($read_label[2]),20,$extension_length );
-				$qual_extension = reverse substr ( reverse($read_label[3]),20,$extension_length );
+#				$qual_extension = reverse substr ( reverse($read_label[3]),20,$extension_length );
 				$mismatch_num=&seq_comp($exon_extension,$read_extension);
 				
 				#for output BMR_1.fastq file
-				$sam_array[9] = join ("",$read_extension,$sam_array[9]);
-				$sam_array[10] = join ("",$qual_extension,$sam_array[10]);
+#				$sam_array[9] = join ("",$read_extension,$sam_array[9]);
+#				$sam_array[10] = join ("",$qual_extension,$sam_array[10]);
 				
-				print FQ_OUT1 join("","@",$read_label[0]),"\n";
-				print FQ_OUT1 $sam_array[9],"\n";
-				print FQ_OUT1 "+","\n";
-				print FQ_OUT1 $sam_array[10],"\n";
+#				print FQ_OUT1 join("","@",$read_label[0]),"\n";
+#				print FQ_OUT1 $sam_array[9],"\n";
+#				print FQ_OUT1 "+","\n";
+#				print FQ_OUT1 $sam_array[10],"\n";
 				
 				#for output BMR_1.fastq file
 				
@@ -510,17 +586,17 @@ sub paired_seeds_extension
 				if ($extension_length < 0) { $extension_length = 0; }
 				$exon_extension = reverse substr ( reverse($Uper_exon),0,$extension_length );
 				$read_extension = substr($read_label[2],20,$extension_length);
-				$qual_extension = substr($read_label[3],20,$extension_length);
+#				$qual_extension = substr($read_label[3],20,$extension_length);
 				$mismatch_num=&seq_comp($exon_extension,$read_extension);
 				
 				#for output BMR_2.fastq file
-				$sam_array[9] = join ("",$sam_array[9],$read_extension);
-				$sam_array[10] = join ("",$sam_array[10],$qual_extension);
+#				$sam_array[9] = join ("",$sam_array[9],$read_extension);
+#				$sam_array[10] = join ("",$sam_array[10],$qual_extension);
 				
-				print FQ_OUT2 join("","@",$read_label[0]),"\n";
-				print FQ_OUT2 $sam_array[9],"\n";
-				print FQ_OUT2 "+","\n";
-				print FQ_OUT2 $sam_array[10],"\n";
+#				print FQ_OUT2 join("","@",$read_label[0]),"\n";
+#				print FQ_OUT2 $sam_array[9],"\n";
+#				print FQ_OUT2 "+","\n";
+#				print FQ_OUT2 $sam_array[10],"\n";
 				#for output BMR_2.fastq file
 				
 				if ( $mismatch_num < 3 )
@@ -543,16 +619,16 @@ sub paired_seeds_extension
 				$read_label[2] =~ tr/ATCGatcg/TAGCtagc/;
 				
 				$read_extension = reverse substr ( $read_label[2],20,$extension_length );
-				$qual_extension = reverse substr ( $read_label[3],20,$extension_length );
+#				$qual_extension = reverse substr ( $read_label[3],20,$extension_length );
 				$mismatch_num=&seq_comp($exon_extension,$read_extension);
 				
 				#for output BMR_1.fastq file
-				$sam_array[9] = join ("",$read_extension,$sam_array[9]);
-				$sam_array[10] = join ("",$qual_extension,$sam_array[10]);
-				print FQ_OUT1 join("","@",$read_label[0]),"\n";
-				print FQ_OUT1 $sam_array[9],"\n";
-				print FQ_OUT1 "+","\n";
-				print FQ_OUT1 $sam_array[10],"\n";
+#				$sam_array[9] = join ("",$read_extension,$sam_array[9]);
+#				$sam_array[10] = join ("",$qual_extension,$sam_array[10]);
+#				print FQ_OUT1 join("","@",$read_label[0]),"\n";
+#				print FQ_OUT1 $sam_array[9],"\n";
+#				print FQ_OUT1 "+","\n";
+#				print FQ_OUT1 $sam_array[10],"\n";
 				#for output BMR_1.fastq file
 	
 				if ( $mismatch_num < 3 )
@@ -573,16 +649,16 @@ sub paired_seeds_extension
 				$read_label[2] =~ tr/ATCGatcg/TAGCtagc/;
 				
 				$read_extension = substr ( reverse ($read_label[2]),20,$extension_length );
-				$qual_extension = substr ( reverse ($read_label[3]),20,$extension_length );
+#				$qual_extension = substr ( reverse ($read_label[3]),20,$extension_length );
 				$mismatch_num=&seq_comp($exon_extension,$read_extension);
 				
 				#for output BMR_2.fastq file
-				$sam_array[9] = join ("",$sam_array[9],$read_extension);
-				$sam_array[10] = join ("",$sam_array[10],$qual_extension);
-				print FQ_OUT2 join("","@",$read_label[0]),"\n";
-				print FQ_OUT2 $sam_array[9],"\n";
-				print FQ_OUT2 "+","\n";
-				print FQ_OUT2 $sam_array[10],"\n";
+#				$sam_array[9] = join ("",$sam_array[9],$read_extension);
+#				$sam_array[10] = join ("",$sam_array[10],$qual_extension);
+#				print FQ_OUT2 join("","@",$read_label[0]),"\n";
+#				print FQ_OUT2 $sam_array[9],"\n";
+#				print FQ_OUT2 "+","\n";
+#				print FQ_OUT2 $sam_array[10],"\n";
 				#for output BMR_2.fastq file
 				
 				if ( $mismatch_num < 3 )
@@ -598,8 +674,8 @@ sub paired_seeds_extension
 	}
 	close(SAM_IN);
 	close(SAM_OUT);
-	close(FQ_OUT1);
-	close(FQ_OUT2);
+#	close(FQ_OUT1);
+#	close(FQ_OUT2);
 }
 
 sub paired_seeds_mating
@@ -1030,7 +1106,7 @@ sub sorting_samfile
 	close(OUT);
 }
 
-sub cR_statistics
+sub cR_statistics_0
 {
 	open (IN,"mapped_reads_list.txt");
 	open (OUT,">circRNA_list_temp.txt");
@@ -1089,7 +1165,7 @@ sub cR_statistics
 	my $i;
 	@array = ();
 	open(IN,"circRNA_list_temp.txt");
-	open(OUT,">circRNA_list.txt");
+	open(OUT,">circRNA_list_1.txt");
 	$line = <IN>;
 	while ($line = <IN>)
 	{
@@ -1103,7 +1179,109 @@ sub cR_statistics
 	}
 	close(IN);
 	close(OUT);
+#filtering the circRNA list >2 reads supported;
+	my @line1;
+	open(IN,"circRNA_list_1.txt");
+	open(OUT,">circRNA_list.txt");
+	while($line=<IN>){
+	@line1=split(/\t/,$line);
+	if($line1[6]>1){
+		print OUT $line;
+		}
+	
+	}
+close(IN);
+close(OUT);
 }
+
+sub cR_statistics_1
+{
+	open (IN,"paired_seeds_to_reads.txt");
+	open (OUT,">circRNA_list_temp.txt");
+
+	my $line;
+	my %hash;
+	my $cR_count = 1;
+	my @array;
+	my $index_string;
+
+	#print OUT join ("\t","NO.","Chromosome","GeneName","JunctionLowerSite","JunctionUperSite","LowerExon","UperExon","ReadStrand","NumberOfMappedReads");
+	#print OUT "\n";
+
+	while ($line=<IN>)
+	{
+		chomp $line;
+		@array = split(/\t/, $line);
+		
+		$index_string = join ("*",$array[1],$array[2],$array[3]);
+
+		if (!exists $hash{$index_string})
+		{
+			$hash{$index_string} =1; 
+		}
+		else
+		{
+			$hash{$index_string} += 1;
+		}
+	}
+	close (IN);
+
+	open (IN,"paired_seeds_to_reads.txt");
+	my %list_hash;
+	while ( $line=<IN> )
+	{
+		chomp $line;
+		@array = split(/\t/, $line);
+		
+		$index_string = join ("*",$array[1],$array[2],$array[3]);
+		
+		if (!exists $list_hash{$index_string})
+		{
+			$list_hash{$index_string} = join ("\t",$array[0],$array[1],$array[2],$array[3],$array[4],$array[5],$hash{$index_string},$array[7]);
+		}
+	}
+	foreach my $key (keys %list_hash)
+	{
+		print OUT $list_hash{$key},"\n";
+	}
+	close(IN);
+	close(OUT);
+
+	#sorting the circRNA list;
+	my $count = 0;
+	my @arr;
+	my $i;
+	@array = ();
+	open(IN,"circRNA_list_temp.txt");
+	open(OUT,">circRNA_list_1.txt");
+	$line = <IN>;
+	while ($line = <IN>)
+	{
+		push @array,[split(/\t/,$line)];
+		$count += 1;
+	}
+	@arr = sort{$b->[6] <=> $a->[6]} @array;
+	for($i=0; $i<$count;$i++)
+	{
+		print OUT join("\t",$arr[$i][0],$arr[$i][1],$arr[$i][2],$arr[$i][3],$arr[$i][4],$arr[$i][5],$arr[$i][6],$arr[$i][7]);
+	}
+	close(IN);
+	close(OUT);
+	#filtering the circRNA list >2 reads supported;
+	my @line1;
+	open(IN,"circRNA_list_1.txt");
+	open(OUT,">circRNA_list.txt");
+	while($line=<IN>){
+	@line1=split(/\t/,$line);
+	if($line1[6]>1){
+		print OUT $line;
+		}
+	
+	}
+close(IN);
+close(OUT);
+}
+
 
 #----------------------------------------------------------
 
@@ -1213,4 +1391,6 @@ sub fetch_Rexon_seq
 	close(CHR_U);
 	return($Uper_exon);
 }
+
+
 
