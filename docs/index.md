@@ -67,7 +67,7 @@ Song X, Zhang N, Han P, Lai RK, Wang K, Lu W. Circular RNA Profile in Gliomas Re
 
 ## Contact
 
-Please contact Xiaofeng Song (xfsong.nuaa@gmail.com) for questions and comments.
+Please contact Xiaofeng Song (xfsong@nuaa.edu.cn) for questions and comments.
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
