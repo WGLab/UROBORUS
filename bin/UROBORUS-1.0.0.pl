@@ -84,7 +84,7 @@ USAGE
 	$when = localtime();
 	print STDERR "[",$when,"]";
 	print STDERR " Now tophat..........";
-	system("tophat --bowtie1 -p $opt_p -o seed_mapped_out --no-coverage-search $opt_index R20_1.fastq R20_2.fastq");
+	system("tophat --bowtie1 -p 6 -o seed_mapped_out --no-coverage-search $opt_index R20_1.fastq R20_2.fastq");
 	print STDERR "finished!","\n";
 
 	my $pwd_str1 = `pwd`;
@@ -1242,7 +1242,7 @@ sub accepted_reads_processing
                                                                                                                 my $strand = $exon_info1[2];
                                                                                                                 my $left_edge = $exon_info1[0] -1;
                                                                                                                 $exonpos{$geneid[1]} = "$left_edge\t$exon_info2[1]\t$strand\t";
-                                                                                                                $exoninfo{$geneid[1]} = "$len\t$transcriptid[1]\n";
+                                                                                                                $exoninfo{$geneid[1]} = "$len\t1\t$transcriptid[1]\n";
                                                                                                         }
                                                                                                 }
                                                                                         }
@@ -1250,7 +1250,7 @@ sub accepted_reads_processing
                                                                                 my @exonids = keys(%exonpos);
                                                                                 if (@exonids >= 1){
                                                                                         my @sortids = sort{$a cmp $b}@exonids;
-                                                                                        print IDNEW $array1[2],"\t",$exonpos{$sortids[0]},$sortids[0],"\t1\t",$exoninfo{$sortids[0]};
+                                                                                        print IDNEW $array1[2],"\t",$exonpos{$sortids[0]},$sortids[0],"\t",$exoninfo{$sortids[0]};
                                                                                 }
                                                                         }
                                                                 }
