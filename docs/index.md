@@ -8,7 +8,7 @@ Before using UROBORUS.pl, you should use TopHat to align the reads to genome, an
 
 ```
 usage:
-perl UROBORUS.pl -index /path/genome -gtf /path/genes.gtf -fasta /path unmapped.sam
+perl UROBORUS.pl -index /path/genome -gtf /path/genes.gtf -fasta /path unmapped.sam accepted_hits.bam
 Options:
 -index: genome index (use bowtie1 index);
 -gtf:   gene annotation file (*.gtf file);
@@ -27,7 +27,7 @@ Options:
 ## Example
 
 ```
-perl UROBORUS.pl -index /home/***/index/Homo_sapiens/UCSC/hg19/Sequence/BowtieIndex/genome -gtf /home/***/circRNA/Gene/genes.gtf -fasta /home/***/circRNA/Gene unmapped.sam
+perl UROBORUS.pl -index /home/***/index/Homo_sapiens/UCSC/hg19/Sequence/BowtieIndex/genome -gtf /home/***/circRNA/Gene/genes.gtf -fasta /home/***/circRNA/Gene unmapped.sam accepted_hits.bam
 ```
 
 ## Prerequisites
