@@ -1,4 +1,4 @@
-## example files
+## Example files
 
 Several example files are provided below to help users test the software:
 
