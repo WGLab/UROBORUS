@@ -6,7 +6,7 @@ use Getopt::Long;
 
 ####################################################################################
 # USAGE
-#					UROBORUS.pl 0.1.3
+#					UROBORUS.pl 1.0.0
 #	circRNA identification tool in total RNA-seq data (or Ploy(A)-minus RNA-seq data)
 my $USAGE =<<USAGE;
 	UROBORUS.pl 0.1.3         (July.11,2016)
