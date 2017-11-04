@@ -111,7 +111,7 @@ USAGE
 	print STDERR "[",$when,"]";
 	print STDERR " Extending the seeds...........";
 	&paired_seeds_extension;#("paired_seeds_location","paired_seeds_extension");
-	exit;
+	
 
 	if ($read_length_label == 0) 
 		{&single_seed_extension;} #(input:single_seed_location.sam;      output:IMR_1.fastq,IMR_2.fastq);
