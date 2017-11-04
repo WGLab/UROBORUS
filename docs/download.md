@@ -1,6 +1,6 @@
 ## main package
 
-The latest version (v1.0.0) can be downloaded from [here](https://github.com/WangGenomicsLab/UROBORUS/archive/v0.1.3.tar.gz).
+The latest version (v1.0.0) can be downloaded from [here](https://github.com/WGLab/UROBORUS/archive/v1.0.0.tar.gz).
 
 Users can download the cutting edge version from GitHub by `git clone git@github.com:WGLab/uroborus.git`.
 
