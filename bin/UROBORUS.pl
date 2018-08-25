@@ -8,10 +8,10 @@ use threads;
 
 ####################################################################################
 # USAGE
-#					UROBORUS.pl 2.0.6
+#					UROBORUS.pl 2.0.0
 #	circRNA identification tool in total RNA-seq data (or Ploy(A)-minus RNA-seq data)
 my $USAGE =<<USAGE;
-	UROBORUS.pl 2.0.6         (Sep. 1, 2018)
+	UROBORUS.pl 2.0.0         (Sep. 1, 2018)
 	usage:
 	UROBORUS.pl -index /path/genome -gtf /path/genes.gtf -fasta /path/ unmapped.sam accepted_hits.bam
 	-index:	genome index(use bowtie index);
