@@ -12,7 +12,7 @@ Several example files are provided below to help users test the software:
 2. The genome annotation file (-gtf): [gtf file](http://bioinfo.nuaa.edu.cn/UROBORUS/genes.rar)
 3. The genome sequence file (-fasta): [fasta file](http://bioinfo.nuaa.edu.cn/UROBORUS/Chromosomes.rar)
 4. Input file -- The unmapped SAM format file (rar file): [unmapped sam file](http://bioinfo.nuaa.edu.cn/UROBORUS/unmapped.rar)
-5. Input file -- The accepted BAM format file (rar file): [accepted bam file](http://bioinfo.nuaa.edu.cn/UROBORUS/accepted_hits.rar)
+5. Input file -- The accepted BAM format file (rar file): [accepted bam file](https://github.com/WGLab/UROBORUS/raw/master/example_files/accepted_hits.bam)
 6. Output file -- The reported circRNA list : [circRNA list file](http://bioinfo.nuaa.edu.cn/UROBORUS/circRNA_list.txt)
 
 Note that the above first 3 files are from Homo_sapiens genome (hg19 version), other species genome files can be downloaded from http://ccb.jhu.edu/software/tophat/igenomes.shtml
